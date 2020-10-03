@@ -286,7 +286,7 @@ struct this_gift_card *thisone;
 
 int main(int argc, char **argv)
 {
-    if (argc >= 3)
+    if (argc > 2)
     {
         FILE *input_fd = fopen(argv[2], "r");
         thisone = gift_card_reader(input_fd);

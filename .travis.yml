@@ -1,4 +1,5 @@
 language: c
 compiler: gcc
 script:
-  - ./configure && make && make test
+  - gcc -o giftcardreader giftcardreader.c
+  - ./giftcardreader 1 examplefile.gft

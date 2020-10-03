@@ -286,13 +286,19 @@ struct this_gift_card *thisone;
 
 int main(int argc, char **argv)
 {
-    // BDG: no argument checking?
-    FILE *input_fd = fopen(argv[2], "r");
-    thisone = gift_card_reader(input_fd);
-    if (argv[1][0] == '1')
-        print_gift_card_info(thisone);
-    else if (argv[1][0] == '2')
-        gift_card_json(thisone);
+    if (argc >= 3)
+    {
+        FILE *input_fd = fopen(argv[2], "r");
+        thisone = gift_card_reader(input_fd);
+        if (argv[1][0] == '1')
+            print_gift_card_info(thisone);
+        else if (argv[1][0] == '2')
+            gift_card_json(thisone);
 
-    return 0;
+        return 0;
+    }
+    else
+    {
+        printf("Arguments are missing, this program requires 2 arguments, option and file name\n");
+    }
 }

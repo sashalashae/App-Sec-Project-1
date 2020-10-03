@@ -1,5 +1,4 @@
 language: c
-before_install:
-  - test -n $CC && unset CC
-compiler:
-  - gcc
+compiler: gcc
+script:
+  - ./configure && make && make test

@@ -1,0 +1,46 @@
+Part 2 Write Up by Sasha Morgan
+
+Crash 1:
+
+I have always personally had issues with memory allocation in C and C++.  These errors plagued my undergrad career, thus 
+my initial bug finding process was to look for Seg Fault and Memory allocations issues.  Based on the main function first argument
+call of gift card reader, I decided to start with this function.  Looking into the function there are two areas that caught my attention.  The mallac of the size of the struct and the num_bytes memory calls.
+Based on the giftcardreader usage of num_bytes, became the target of focus for this attack.  Based on the informatiion provided by the giftcardexample writer.
+Num_bytes is not allocated dynamically, rather based on the hard coded value provided by the designer.  Making num_bytes a possible area for where a bug can happen.
+
+The following section of code is a pontential bug inside of the struct this_gift_card *gift_card_reader(FILE *input_fd):
+
+        ptr = malloc(ret_val->num_bytes);
+        fread(ptr, ret_val->num_bytes, 1, input_fd);
+
+        optr = ptr - 4;
+
+Passing a negative num_bytes into malloc will cause the malloc to allocate a larger size or null value depending on the negative integer inputed.  This isn't a huge issue,
+until the memory location is accessed which happens in the next line during the fread call.  This will result in a null or 0 values as the memory cannot be accessed properly.
+then optr = 0-4 causing further memory issues as the optr pointer now becomes a negative value.  Thus causing a segmentation fault.
+
+Thus for Crash1.gft, I changed the Num_bytes from 116 to -116.
+
+The following results appeared when I tried to run the giftcardreader on the file:
+(base) sashamorgan@Sashas-MBP App-Sec-Project-1 % ./giftcardreader 1 crash1.gft
+zsh: segmentation fault  ./giftcardreader 1 crash1.gft
+
+The patch for this bug is rather simple, adding a check to make sure the ptr->num_bytes is greater than 0 should fix the issue. 
+The patched code is the following:
+if (ret_val->num_bytes > 0)
+    {
+        // Make something the size of the rest and read it in
+        ptr = malloc(ret_val->num_bytes);
+
+        fread(ptr, ret_val->num_bytes, 1, input_fd);
+
+        optr = ptr - 4;
+        ...
+    }
+else{
+    printf("Error:  Gift Card data contains a Bytes allocation that is less than 0, please try again.\n");
+    exit(0);
+}
+
+Crash 2:
+

@@ -204,7 +204,7 @@ struct this_gift_card *gift_card_reader(FILE *input_fd)
         struct gift_card_data *gcd_ptr;
         /* JAC: Why aren't return types checked? */
         fread(&ret_val->num_bytes, 4, 1, input_fd);
-        if (ret_val->num_bytes > 0)
+        if (ret_val->num_bytes >= 0)
         {
             // Make something the size of the rest and read it in
             ptr = malloc(ret_val->num_bytes);
@@ -279,7 +279,7 @@ struct this_gift_card *gift_card_reader(FILE *input_fd)
                     gcrd_ptr->actual_record = gcp_ptr;
                 }
             }
-                }
+        }
         else
         {
             printf("Error:  Gift Card data contains a Bytes allocation that is less than 0, please try again.\n");

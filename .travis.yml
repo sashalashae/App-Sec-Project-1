@@ -3,3 +3,4 @@ compiler: gcc
 script:
   - gcc -o giftcardreader giftcardreader.c
   - ./giftcardreader 1 examplefile.gft
+  - ./giftcardreader 1 /part/crash1.gft

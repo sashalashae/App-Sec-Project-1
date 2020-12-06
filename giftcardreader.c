@@ -30,6 +30,11 @@ void animate(char *msg, unsigned char *program)
         case 0x00:
             break;
         case 0x01:
+            if (arg1 >= 16)
+            {
+                printf("Stack Corruption Issue:  Please Check your giftcard. My registers are melting\n");
+                exit(0);
+            }
             regs[arg1] = *mptr;
             break;
         case 0x02:
@@ -39,6 +44,11 @@ void animate(char *msg, unsigned char *program)
             mptr += (char)arg1;
             break;
         case 0x04:
+            if (arg2 >= 16)
+            {
+                printf("Stack Corruption Issue:  Please Check your giftcard.  Give the registers a lil break.\n");
+                exit(0);
+            }
             regs[arg2] = arg1;
             break;
         case 0x05:
@@ -56,6 +66,12 @@ void animate(char *msg, unsigned char *program)
             goto done;
         case 0x09:
             pc += (char)arg1;
+            if (pc > 0)
+            {
+                printf("Stack Corruption Issue:  Please Check your giftcard.  This program tried to be loopy.\n");
+
+                exit(0);
+            }
             break;
         case 0x10:
             if (zf)
@@ -77,6 +93,7 @@ void print_gift_card_info(struct this_gift_card *thisone)
     struct gift_card_amount_change *gcac_ptr;
     struct gift_card_program *gcp_ptr;
 
+    int originali = 1;
     gcd_ptr = thisone->gift_card_data;
     printf("   Merchant ID: %32.32s\n", gcd_ptr->merchant_id);
     printf("   Customer ID: %32.32s\n", gcd_ptr->customer_id);
@@ -106,6 +123,12 @@ void print_gift_card_info(struct this_gift_card *thisone)
             printf("      message: %s\n", gcp_ptr->message);
             printf("  [running embedded program]  \n");
             animate(gcp_ptr->message, gcp_ptr->program);
+            if (i != originali)
+            {
+                printf("Stack Corruption Issue:  Please Check your giftcard\n");
+                exit(0);
+            }
+            originali = originali + 1;
         }
     }
     printf("  Total value: %d\n\n", get_gift_card_value(thisone));

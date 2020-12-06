@@ -22,7 +22,7 @@ struct gift_card_amount_change examplegcac;
 //  terrible thing to do.)
 void setupgc()
 {
-	examplegc.num_bytes = -116;
+	examplegc.num_bytes = 116;
 	examplegc.gift_card_data = (void *)&examplegcd;
 	examplegcd.merchant_id = "GiftCardz.com                   ";
 	examplegcd.customer_id = "DuaneGreenes Store 1451         ";
@@ -33,10 +33,10 @@ void setupgc()
 	/* JAC: here too! */
 	examplegcd.gift_card_record_data[0] = (void *)&examplegcrd;
 	examplegcrd.record_size_in_bytes = 44;
-	examplegcrd.type_of_record = 1; // JAC: Should be enum!  amount_change
+	examplegcrd.type_of_record = 3; // JAC: Should be enum!  amount_change
 	examplegcrd.actual_record = (void *)&examplegcac;
 	examplegcac.amount_added = 2000;
-	examplegcac.actual_signature = "[Sasha Morgan]";
+	examplegcac.actual_signature = "[ insert crypto signature here ]";
 }
 
 // moved into separate files to avoid erroenous style checker error...
@@ -47,7 +47,7 @@ void writegc()
 {
 	FILE *fd1;
 	// JAC: Why don't any of these check for error return codes?!?
-	fd1 = fopen("crash2.gft", "w");
+	fd1 = fopen("examplefile.gft", "w");
 	fwrite(&examplegc.num_bytes, 4, 1, fd1);
 	fwrite(examplegcd.merchant_id, 32, 1, fd1);
 	fwrite(examplegcd.customer_id, 32, 1, fd1);

@@ -9,7 +9,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "/Users/sashamorgan/Documents/Fall 2020/App-Sec-Project-1/giftcardreader",
-      "args": ["1", "fuzzer1.gft"],
+      "args": ["1", "part3/fuzzerhang.gft"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],

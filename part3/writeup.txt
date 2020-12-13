@@ -1,0 +1,102 @@
+GCOV Originial Coverage
+
+(base) sashamorgan@Sashas-MBP App-Sec-Project-1 % gcov giftcardreader          
+File 'giftcardreader.c'
+Lines executed:48.70% of 193
+giftcardreader.c:creating 'giftcardreader.c.gcov'
+
+GCOV After Fuzzer Test
+(base) sashamorgan@Sashas-MBP Combined Tests % gcov giftcardreader        
+File 'giftcardreader.c'
+Lines executed:76.17% of 193
+giftcardreader.c:creating 'giftcardreader.c.gcov'
+
+LCOV Original
+(base) sashamorgan@Sashas-MBP Combined Tests % genhtml giftcardreader.info -o gift_report
+Reading data file giftcardreader.info
+Found 1 entries.
+Found common filename prefix "/Users/sashamorgan/Documents/Fall 2020/App-Sec-Project-1"
+Writing .css and .png files.
+Generating output.
+Processing file Combined Tests/giftcardreader.c
+Writing directory view page.
+Overall coverage rate:
+  lines......: 48.7% (94 of 193 lines)
+  functions..: 66.7% (4 of 6 functions)
+
+LCOV After
+(base) sashamorgan@Sashas-MBP Combined Tests % genhtml giftcardreader.info -o gift_report
+Reading data file giftcardreader.info
+Found 1 entries.
+Found common filename prefix "/Users/sashamorgan/Documents/Fall 2020/App-Sec-Project-1"
+Writing .css and .png files.
+Generating output.
+Processing file Combined Tests/giftcardreader.c
+Writing directory view page.
+Overall coverage rate:
+  lines......: 76.2% (147 of 193 lines)
+  functions..: 83.3% (5 of 6 functions)
+
+
+Coverage Testing:
+
+Empty Named File.
+  After running the LCOV coverage report testing I needed to fix at least two coverage issues found in the
+  coverate testing.  The first that I fixed was in the main function.  When the program is called there is no 
+  argument checking, if the program does not have the proper number of command line arguments the program will crash.
+  To fix this I added a size check to ensure the number of arguments was correct.  To test this error I have a test gift
+  with no name.
+
+  Original Code:
+  int main(int argc, char **argv) {
+    // BDG: no argument checking?
+	FILE *input_fd = fopen(argv[2],"r");
+	thisone = gift_card_reader(input_fd);
+	if (argv[1][0] == '1') print_gift_card_info(thisone);
+    else if (argv[1][0] == '2') gift_card_json(thisone);
+
+	return 0;
+}
+Fixed Code:
+int main(int argc, char **argv)
+{
+    // BDG: no argument checking?
+    if (argc >= 3)
+    {
+        FILE *input_fd = fopen(argv[2], "r");
+        thisone = gift_card_reader(input_fd);
+        if (argv[1][0] == '1')
+            print_gift_card_info(thisone);
+        else if (argv[1][0] == '2')
+            gift_card_json(thisone);
+    }
+    else
+    {
+        printf("Arguments are missing, this program requires 2 arguments, option and file name\n");
+    }
+    return 0;
+}
+
+
+Type 2 Testing:
+
+In my original test cases, I only tested type 3 giftcards thus a large portion of the missing coverage was caused
+by the missing giftcard type 1 or 2 tests.  Thus I created two giftcards, lcov1.gft and lcov2.gft to cover the type 1
+and two giftcards.  This addressed the coverage issues present in the beginnign.
+
+
+
+Fuzzer:
+
+Crash Gift:
+
+When a message value is passed into the giftcard it can't be larger than 16 bytes of memory.  In the case of case 4 in the animate
+function, the crash gift from the fuzzer is greater than 16 thus causing the program to seg fault.  To fix this error, I added a check
+to see if the arg2 value is greater than 16.  If it is the program will exit and report an error message.
+
+Hang Gift:
+
+In the hang fuzzer file the print_gift_card_info is being used 97 times.  Towards the fourth iteration of the loop, the data is corrupted and
+turns the program record size to a negative value which causes a memory leak.  Once the program continues and hits the animate function
+this memory leak causes the program to loop throuhg the animate.  To fix this I added a check for the program record size value to be greater than 0,
+if not the program exits.

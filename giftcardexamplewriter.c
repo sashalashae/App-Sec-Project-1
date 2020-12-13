@@ -33,7 +33,7 @@ void setupgc()
 	/* JAC: here too! */
 	examplegcd.gift_card_record_data[0] = (void *)&examplegcrd;
 	examplegcrd.record_size_in_bytes = 44;
-	examplegcrd.type_of_record = 3; // JAC: Should be enum!  amount_change
+	examplegcrd.type_of_record = 1; // JAC: Should be enum!  amount_change
 	examplegcrd.actual_record = (void *)&examplegcac;
 	examplegcac.amount_added = 2000;
 	examplegcac.actual_signature = "[ insert crypto signature here ]";

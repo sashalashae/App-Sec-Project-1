@@ -6,3 +6,7 @@ script:
   - ./giftcardreader 1 part2/crash1.gft
   - ./giftcardreader 1 part2/crash2.gft
   - ./giftcardreader 1 part2/hang.gft
+  - ./giftcardreader 1 part3/lcov1.gft
+  - ./giftcardreader 1 part3/lcov2.gft
+  - ./giftcardreader 1 part3/fuzzerhang.gft
+  - ./giftcardreader 1 part3/fuzzercrash.gft

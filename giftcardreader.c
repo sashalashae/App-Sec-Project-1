@@ -100,6 +100,10 @@ void print_gift_card_info(struct this_gift_card *thisone)
     printf("   Num records: %d\n", gcd_ptr->number_of_gift_card_records);
     for (int i = 0; i < gcd_ptr->number_of_gift_card_records; i++)
     {
+        if (i == 9)
+        {
+            printf("9");
+        }
         gcrd_ptr = (struct gift_card_record_data *)gcd_ptr->gift_card_record_data[i];
         if (gcrd_ptr->type_of_record == 1)
         {
@@ -119,6 +123,11 @@ void print_gift_card_info(struct this_gift_card *thisone)
         else if (gcrd_ptr->type_of_record == 3)
         {
             gcp_ptr = gcrd_ptr->actual_record;
+            if (gcrd_ptr->record_size_in_bytes < 0)
+            {
+                printf("Stack Corruption Issue:  Please Check your giftcard.  The program size is a negative value which is a no no.\n");
+                exit(0);
+            }
             printf("      record_type: animated message\n");
             printf("      message: %s\n", gcp_ptr->message);
             printf("  [running embedded program]  \n");
